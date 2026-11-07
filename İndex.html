@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+
+<html lang="tr">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Navimap</title>
+
+<style>
+
+* { box-sizing:border-box; }
+
+body {
+
+  margin:0;
+
+  font-family:Arial,sans-serif;
+
+  background:#f3f6fb;
+
+  color:#172b4d;
+
+}
+
+header {
+
+  background:#173b70;
+
+  color:white;
+
+  padding:24px;
+
+  text-align:center;
+
+}
+
+header h1 { margin:0; font-size:30px; }
+
+header p { margin-bottom:0; }
+
+main { padding:20px; max-width:600px; margin:auto; }
+
+.card {
+
+  background:white;
+
+  padding:20px;
+
+  border-radius:16px;
+
+  margin-bottom:16px;
+
+  box-shadow:0 3px 12px #00000010;
+
+}
+
+select,button {
+
+  width:100%;
+
+  padding:14px;
+
+  border-radius:10px;
+
+  font-size:16px;
+
+  margin-top:10px;
+
+}
+
+select { border:1px solid #ccd5e1; background:white; }
+
+button {
+
+  border:0;
+
+  background:#2463ae;
+
+  color:white;
+
+  font-weight:bold;
+
+}
+
+#map {
+
+  background:#eaf0f7;
+
+  padding:15px;
+
+  border-radius:12px;
+
+  display:grid;
+
+  grid-template-columns:1fr 1fr;
+
+  gap:10px;
+
+}
+
+.room {
+
+  background:white;
+
+  border:2px solid #9eb5d0;
+
+  border-radius:9px;
+
+  padding:20px 5px;
+
+  text-align:center;
+
+  font-weight:bold;
+
+}
+
+#result { line-height:1.6; }
+
+small { color:#65758b; }
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+  <h1>📍 NAVIMAP</h1>
+
+  <p>Okulunda kaybolma, yolunu bul!</p>
+
+</header>
+
+<main>
+
+  <div class="card">
+
+    <h2>Nereye gitmek istiyorsun?</h2>
+
+    <select id="destination">
+
+      <option value="">Bir yer seç</option>
+
+      <option>9-A Sınıfı</option>
+
+      <option>9-B Sınıfı</option>
+
+      <option>Kütüphane</option>
+
+      <option>Kantin</option>
+
+      <option>Öğretmenler Odası</option>
+
+      <option>Spor Salonu</option>
+
+    </select>
+
+    <button onclick="findRoute()">Yolumu Göster</button>
+
+  </div>
+
+  <div class="card">
+
+    <h2>Okul Haritası</h2>
+
+    <small>Örnek harita – gerçek okul planı daha sonra eklenecek.</small>
+
+    <div id="map">
+
+      <div class="room">9-A</div>
+
+      <div class="room">9-B</div>
+
+      <div class="room">Kütüphane</div>
+
+      <div class="room">Kantin</div>
+
+      <div class="room">Öğretmenler Odası</div>
+
+      <div class="room">Spor Salonu</div>
+
+    </div>
+
+    <p id="result">Gitmek istediğin yeri seç.</p>
+
+  </div>
+
+  <div class="card">
+
+    <h2>📍 Konumum</h2>
+
+    <p id="location">Konum henüz alınmadı.</p>
+
+    <button onclick="getLocation()">Konumumu Bul</button>
+
+    <small>GPS okul içinde hassas olmayabilir.</small>
+
+  </div>
+
+</main>
+
+<script>
+
+function findRoute() {
+
+  const place = document.getElementById("destination").value;
+
+  const result = document.getElementById("result");
+
+  if (!place) {
+
+    result.innerText = "Lütfen önce bir yer seç.";
+
+    return;
+
+  }
+
+  result.innerText =
+
+    "Hedef: " + place +
+
+    "\nRota: Girişten hedefe giden yol henüz örnek aşamasında.";
+
+}
+
+function getLocation() {
+
+  const output = document.getElementById("location");
+
+  if (!navigator.geolocation) {
+
+    output.innerText = "Cihazın konum özelliği desteklenmiyor.";
+
+    return;
+
+  }
+
+  output.innerText = "Konum aranıyor...";
+
+  navigator.geolocation.getCurrentPosition(
+
+    function(position) {
+
+      output.innerText =
+
+        "Enlem: " + position.coords.latitude +
+
+        "\nBoylam: " + position.coords.longitude;
+
+    },
+
+    function() {
+
+      output.innerText = "Konum alınamadı. Konum iznini kontrol et.";
+
+    },
+
+    {enableHighAccuracy:true}
+
+  );
+
+}
+
+</script>
+
+</body>
+
+</html
